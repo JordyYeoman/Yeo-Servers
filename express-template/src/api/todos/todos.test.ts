@@ -3,6 +3,8 @@ import request from 'supertest';
 import app from '../../app';
 import { TodosCollection } from './todos.model';
 
+jest.setTimeout(30000); // Update setTimeout for slower network connections
+
 beforeAll(async () => {
   try {
     await TodosCollection.drop();
