@@ -9,5 +9,5 @@ export const Todo = z.object({
 });
 
 export type Todo = z.infer<typeof Todo>;
-export type TodoWithId = WithId<Todo>;
+export type TodoWithId = WithId<Todo>; // Utilise the helper method from mongodb to wrap type with default ID.
 export const TodosCollection = db.collection<Todo>('todos');
