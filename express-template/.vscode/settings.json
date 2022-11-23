@@ -2,5 +2,7 @@
   "editor.formatOnSave": true,
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "files.trimTrailingWhitespace": true,
+  "prettier.trailingComma": "all"
 }

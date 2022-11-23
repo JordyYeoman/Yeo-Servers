@@ -1,14 +1,19 @@
 import request from 'supertest';
 
 import app from '../../app';
+import { client } from '../../db';
 import { TodosCollection } from './todos.model';
-
-jest.setTimeout(30000); // Update setTimeout for slower network connections
 
 beforeAll(async () => {
   try {
     await TodosCollection.drop();
-  } catch (error) {}
+  } catch (error) {
+    // console.log('Error: ', error); // Uncomment for debugging
+  }
+});
+
+afterAll(async () => {
+  client.close();
 });
 
 describe('GET /api/v1/todos', () => {

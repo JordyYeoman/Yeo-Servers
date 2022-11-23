@@ -3,6 +3,6 @@ import * as TodoControllers from './todos.controllers';
 
 const router = Router();
 
-router.get('/', TodoControllers.FindAll);
+router.get('/', TodoControllers.findAll);
 
 export default router;
