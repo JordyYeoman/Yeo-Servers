@@ -9,9 +9,6 @@ import * as middlewares from './middlewares';
 import api from './api';
 import MessageResponse from './interfaces/MessageResponse';
 
-// Debug
-import { db } from './db';
-
 const app = express();
 
 app.use(morgan('dev'));

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { client } from './db';
 
 // global.afterAll is executing before the unit tests finish running?

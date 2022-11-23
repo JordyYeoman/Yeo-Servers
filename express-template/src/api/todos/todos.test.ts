@@ -30,3 +30,40 @@ describe('GET /api/v1/todos', () => {
       });
   });
 });
+
+describe('POST /api/v1/todos', () => {
+  it('responds with an error if the todo is invalid', (done) => {
+    request(app)
+      .post('/api/v1/todos')
+      .set('Accept', 'application/json')
+      .send({
+        content: '',
+        done: false,
+      })
+      .expect('Content-Type', /json/)
+      .expect(422)
+      .then((response) => {
+        expect(response.body).toHaveProperty('message');
+        done();
+      });
+  });
+
+  it('responds with an inserted object', (done) => {
+    request(app)
+      .post('/api/v1/todos')
+      .set('Accept', 'application/json')
+      .send({
+        content: 'Learn C++ Vectors',
+        done: false,
+      })
+      .expect('Content-Type', /json/)
+      .expect(201)
+      .then((response) => {
+        expect(response.body).toHaveProperty('_id');
+        expect(response.body).toHaveProperty('content');
+        expect(response.body.content).toEqual('Learn C++ Vectors');
+        expect(response.body).toHaveProperty('done');
+        done();
+      });
+  });
+});
