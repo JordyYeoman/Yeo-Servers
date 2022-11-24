@@ -1,27 +1,27 @@
 import { Router } from 'express';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 import { validateRequest } from '../../middlewares';
-import * as TodoControllers from './todos.handlers';
+import * as TodoHandlers from './todos.handlers';
 import { Todo } from './todos.model';
 
 const router = Router();
 
-router.get('/', TodoControllers.findAll);
+router.get('/', TodoHandlers.findAll);
 router.get(
   '/:id',
   validateRequest({ params: ParamsWithId }),
-  TodoControllers.findOne,
+  TodoHandlers.findOne,
 );
-router.post('/', validateRequest({ body: Todo }), TodoControllers.createOne);
+router.post('/', validateRequest({ body: Todo }), TodoHandlers.createOne);
 router.put(
   '/:id',
   validateRequest({ params: ParamsWithId, body: Todo }),
-  TodoControllers.updateOne,
+  TodoHandlers.updateOne,
 );
 router.delete(
   '/:id',
   validateRequest({ params: ParamsWithId }),
-  TodoControllers.deleteOne,
+  TodoHandlers.deleteOne,
 );
 
 export default router;

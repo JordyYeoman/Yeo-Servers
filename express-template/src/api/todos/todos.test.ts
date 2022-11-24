@@ -1,5 +1,4 @@
 import request from 'supertest';
-
 import app from '../../app';
 import { client } from '../../db';
 import { TodosCollection } from './todos.model';
