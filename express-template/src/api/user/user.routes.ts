@@ -1,8 +1,8 @@
 import { Router } from 'express';
+import { validateRequest } from '../../middlewares';
 // import { ParamsWithId } from '../../interfaces/ParamsWithId';
-// import { validateRequest } from '../../middlewares';
 import * as UserHandlers from './user.handlers';
-// import { User } from './user.model';
+import { User } from './user.model';
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.get('/', UserHandlers.findAll);
 //   validateRequest({ params: ParamsWithId }),
 //   UserHandlers.findOne,
 // );
-// router.post('/', validateRequest({ body: User }), UserHandlers.createOne);
+router.post('/', validateRequest({ body: User }), UserHandlers.createOne);
 // router.put(
 //   '/:id',
 //   validateRequest({ params: ParamsWithId, body: User }),

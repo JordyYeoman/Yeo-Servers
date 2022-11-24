@@ -44,3 +44,55 @@ describe('GET /api/v1/user', () => {
         expect(response.body.length).toBe(0);
       }));
 });
+
+describe('POST /api/v1/user', () => {
+  it('responds with an error if the user is invalid', async () =>
+    request(app)
+      .post('/api/v1/user')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Jordy Yeoman',
+      })
+      .expect('Content-Type', /json/)
+      .expect(422)
+      .then((response) => {
+        expect(response.body).toHaveProperty('message');
+      }));
+  it('responds with an inserted object', async () =>
+    request(app)
+      .post('/api/v1/user')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Jordy Yeoman',
+        age: 437,
+        email: 'test@yeomanindustries.com.au',
+        emailConfirmed: false,
+        userType: 'admin',
+      })
+      .expect('Content-Type', /json/)
+      .expect(201)
+      .then((response) => {
+        expect(response.body).toHaveProperty('_id');
+        id = response.body._id;
+        expect(response.body.age).toEqual(437);
+        expect(response.body.email).toEqual('test@yeomanindustries.com.au');
+        expect(response.body.userType).toEqual('admin');
+      }));
+  it('responds with an inserted object', async () =>
+    request(app)
+      .post('/api/v1/user')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Jordy Yeoman',
+        age: 437,
+        email: 'test...yeomanindustries.com.au',
+        emailConfirmed: false,
+        userType: 'admin',
+      })
+      .expect('Content-Type', /json/)
+      .expect(422)
+      .then((response) => {
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toContain('Invalid email'); // Expect ZOD error for invalid email.
+      }));
+});
