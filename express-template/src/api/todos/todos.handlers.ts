@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { ZodError } from 'zod';
 import { Todo, TodoWithId, TodosCollection } from './todos.model';
 
 export async function findAll(
@@ -30,9 +29,6 @@ export async function createOne(
       ...validateResult,
     });
   } catch (error) {
-    if (error instanceof ZodError) {
-      res.status(422);
-    }
     next(error);
   }
 }

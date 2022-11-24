@@ -1,13 +1,11 @@
 import { NextFunction, Router, Request, Response } from 'express';
+import { AnyZodObject, ZodError } from 'zod';
 import * as TodoControllers from './todos.handlers';
+import { Todo } from './todos.model';
 
 const router = Router();
 
-const validateRequest = () => {
-  return (req: Request, res: Response, next: NextFunction) => {};
-};
-
 router.get('/', TodoControllers.findAll);
-router.post('/', TodoControllers.createOne);
+router.post('/', validateRequest({ body: Todo }), TodoControllers.createOne);
 
 export default router;

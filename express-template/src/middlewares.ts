@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+import { ZodError } from 'zod';
 
 import ErrorResponse from './interfaces/ErrorResponse';
+import { RequestValidators } from './interfaces/Validator';
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
@@ -23,3 +25,26 @@ export function errorHandler(
   });
   next();
 }
+
+// General purpose error handler
+export const validateRequest = (validators: RequestValidators) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (validators.body) {
+        req.body = await validators.body.parseAsync(req.body);
+      }
+      if (validators.params) {
+        req.params = await validators.params.parseAsync(req.params);
+      }
+      if (validators.query) {
+        req.query = await validators.query.parseAsync(req.query);
+      }
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(422);
+      }
+      next(error);
+    }
+  };
+};
