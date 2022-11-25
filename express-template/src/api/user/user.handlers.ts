@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
-import { User, UserCollection, UserWithId } from './user.model';
+import { User, UserCollection, UserSignUp, UserWithId } from './user.model';
 
 export async function findAll(
   req: Request,
@@ -15,6 +15,48 @@ export async function findAll(
     next(error);
   }
 }
+
+// Create sign up handler
+export async function createOneUser(
+  req: Request<{}, UserWithId, UserSignUp>,
+  res: Response<UserWithId>,
+  next: NextFunction,
+) {
+  try {
+    const { username, name, age, password, email, emailConfirmed, userType } =
+      req.body;
+    // Extract and save only fields required for User.
+    const newUser: User = {
+      username,
+      name,
+      age,
+      password,
+      email,
+      emailConfirmed,
+      userType,
+    };
+
+    // Password hashing or identitiy provider
+
+    const insertResult = await UserCollection.insertOne(newUser); // Error thrown here are passed to the error handler, similar in most Collection methods.
+    if (!insertResult.acknowledged) throw new Error('Error creating User');
+    res.status(201);
+    res.json({
+      _id: insertResult.insertedId,
+      username,
+      name,
+      age,
+      email,
+      emailConfirmed,
+      userType,
+    });
+  } catch (error) {
+    console.log('Error: ', error);
+    next(error);
+  }
+}
+
+// Create sign in handler
 
 export async function createOne(
   req: Request<{}, UserWithId, User>,

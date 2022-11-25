@@ -61,6 +61,8 @@ describe('POST /api/v1/user', () => {
         name: 'Jordy Yeoman',
         age: 437,
         email: 'test@yeomanindustries.com.au',
+        password: 'testingBigDawg123',
+        passwordConfirmation: 'testingBigDawg123',
         emailConfirmed: false,
         userType: 'admin',
       })
@@ -109,6 +111,7 @@ describe('GET /api/v1/user/:id', () => {
       .expect('Content-Type', /json/)
       .expect(404, done);
   });
+  // Test passwords not matching
 });
 
 describe('PUT /api/v1/user/:id', () => {
@@ -118,6 +121,8 @@ describe('PUT /api/v1/user/:id', () => {
     age: 42,
     email: 'tony.stark@starkindustries.com',
     emailConfirmed: true,
+    password: 'tonyStarkHasAHeart123',
+    passwordConfirmation: 'tonyStarkHasAHeart123',
     userType: 'admin',
   };
 
