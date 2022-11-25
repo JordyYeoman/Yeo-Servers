@@ -3,6 +3,8 @@ import { ObjectId } from 'mongodb';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 import { User, UserCollection, UserSignUp, UserWithId } from './user.model';
 
+import bcrypt from 'bcryptjs';
+
 export async function findAll(
   req: Request,
   res: Response<UserWithId[]>,
@@ -25,18 +27,19 @@ export async function createOneUser(
   try {
     const { username, name, age, password, email, emailConfirmed, userType } =
       req.body;
-    // Extract and save only fields required for User.
+
+    // Password hashing or identitiy provider
+    let hash = await bcrypt.hash(password, 12);
+
     const newUser: User = {
       username,
       name,
       age,
-      password,
+      password: hash, // replace password with hash of password
       email,
       emailConfirmed,
       userType,
     };
-
-    // Password hashing or identitiy provider
 
     const insertResult = await UserCollection.insertOne(newUser); // Error thrown here are passed to the error handler, similar in most Collection methods.
     if (!insertResult.acknowledged) throw new Error('Error creating User');
