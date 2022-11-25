@@ -57,6 +57,7 @@ describe('POST /api/v1/user', () => {
       .post('/api/v1/user')
       .set('Accept', 'application/json')
       .send({
+        username: 'JSwizzle123',
         name: 'Jordy Yeoman',
         age: 437,
         email: 'test@yeomanindustries.com.au',
@@ -69,6 +70,8 @@ describe('POST /api/v1/user', () => {
         expect(response.body).toHaveProperty('_id');
         id = response.body._id; // Used for following tests
         expect(response.body.age).toEqual(437);
+        expect(response.body.username).toEqual('JSwizzle123');
+        expect(response.body.name).toEqual('Jordy Yeoman');
         expect(response.body.email).toEqual('test@yeomanindustries.com.au');
         expect(response.body.userType).toEqual('admin');
       }));
@@ -82,9 +85,11 @@ describe('GET /api/v1/user/:id', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
-        const { name, age, email, emailConfirmed, userType } = response.body;
+        const { username, name, age, email, emailConfirmed, userType } =
+          response.body;
         expect(response.body).toHaveProperty('_id');
         expect(name).toEqual('Jordy Yeoman');
+        expect(username).toEqual('JSwizzle123');
         expect(age).toEqual(437);
         expect(email).toEqual('test@yeomanindustries.com.au');
         expect(emailConfirmed).toEqual(false);
@@ -108,6 +113,7 @@ describe('GET /api/v1/user/:id', () => {
 
 describe('PUT /api/v1/user/:id', () => {
   let dummyUser = {
+    username: 'PPots123',
     name: 'Tony Stark',
     age: 42,
     email: 'tony.stark@starkindustries.com',
@@ -138,8 +144,10 @@ describe('PUT /api/v1/user/:id', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
-        const { name, age, email, emailConfirmed, userType } = response.body;
+        const { username, name, age, email, emailConfirmed, userType } =
+          response.body;
         expect(response.body).toHaveProperty('_id');
+        expect(username).toEqual('PPots123');
         expect(name).toEqual('Tony Stark');
         expect(age).toEqual(42);
         expect(email).toEqual('tony.stark@starkindustries.com');
