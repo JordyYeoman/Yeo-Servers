@@ -4,6 +4,7 @@ import { ParamsWithId } from '../../interfaces/ParamsWithId';
 import {
   User,
   UserCollection,
+  UserLogin,
   UserSignUp,
   UserWithId,
   UserWithJWT,
@@ -50,10 +51,10 @@ export async function createOneUser(
     const insertResult = await UserCollection.insertOne(newUser); // Error thrown here are passed to the error handler, similar in most Collection methods.
     if (!insertResult.acknowledged) throw new Error('Error creating User');
 
-    // Sign JWT with userid
+    // Sign JWT
     const token = jwt.sign(
       { id: insertResult.insertedId },
-      process.env.JWT_SECRET,
+      `${process.env.JWT_SECRET}`,
       {
         expiresIn: process.env.JWT_EXPIRES_IN,
       },
@@ -79,6 +80,31 @@ export async function createOneUser(
 }
 
 // Create sign in handler
+export async function findOneUser(
+  req: Request<{}, UserWithId, UserLogin>,
+  res: Response<UserWithId>,
+  next: NextFunction,
+) {
+  const { email, password } = req.body;
+  console.log('Made it here', req.body);
+  if (!email || !password) {
+    res.status(404);
+    throw new Error('User not found.');
+  }
+  // Check if email and password are valid
+  try {
+    const result = await UserCollection.findOne({
+      email: email,
+    });
+    if (!result) {
+      res.status(404);
+      throw new Error('User not found.');
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function createOne(
   req: Request<{}, UserWithId, User>,

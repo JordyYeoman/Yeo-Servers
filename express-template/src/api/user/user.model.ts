@@ -1,4 +1,4 @@
-import { WithId } from 'mongodb';
+import { ObjectId, WithId } from 'mongodb';
 import * as z from 'zod';
 
 import { db } from '../../db';
@@ -28,7 +28,7 @@ export const UserWithoutSensitiveData = z.object({
 export const UserWithJWT = z.object({
   token: z.string().min(10),
   data: z.object({
-    _id: z.string().min(10), // Remove _id declaration here and wrap `withId` when understanding for extending zod interfaces/types
+    _id: z.instanceof(ObjectId), // Remove _id declaration here and wrap `withId` when understanding for extending zod interfaces/types
     username: z.string().min(5),
     name: z.string().min(5),
     age: z.number().min(10),
@@ -55,9 +55,16 @@ export const UserSignUp = z
     path: ['passwordConfirmation'],
   });
 
+// User Login
+export const UserLogin = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>; // Used for responding to a new user creation without sensitive data.
 export type UserSignUp = z.infer<typeof UserSignUp>; // Used for initial sign up
 export type UserWithJWT = z.infer<typeof UserWithJWT>; // Used for responding to a user signup / login
 export type User = z.infer<typeof User>;
+export type UserLogin = z.infer<typeof UserLogin>; // Used for login params
 export type UserWithId = WithId<UserWithoutSensitiveData>; // Default User model that will be returned from MongoDB (MongoDB will always add user id)
 export const UserCollection = db.collection<User>('user');

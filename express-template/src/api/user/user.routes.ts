@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 import * as UserHandlers from './user.handlers';
-import { User, UserSignUp } from './user.model';
+import { User, UserSignUp, UserLogin } from './user.model';
 
 const router = Router();
 
@@ -20,6 +20,11 @@ router.post(
   '/signup',
   validateRequest({ body: UserSignUp }),
   UserHandlers.createOneUser,
+);
+router.get(
+  '/login',
+  validateRequest({ body: UserLogin }),
+  UserHandlers.findOneUser,
 );
 
 // PUT - Update Object
