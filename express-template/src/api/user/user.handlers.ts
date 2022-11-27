@@ -1,8 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
-import { User, UserCollection, UserSignUp, UserWithId } from './user.model';
-
+import {
+  User,
+  UserCollection,
+  UserSignUp,
+  UserWithId,
+  UserWithJWT,
+} from './user.model';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 export async function findAll(
@@ -20,8 +26,8 @@ export async function findAll(
 
 // Create sign up handler
 export async function createOneUser(
-  req: Request<{}, UserWithId, UserSignUp>,
-  res: Response<UserWithId>,
+  req: Request<{}, UserWithJWT, UserSignUp>,
+  res: Response<UserWithJWT>,
   next: NextFunction,
 ) {
   try {
@@ -43,15 +49,28 @@ export async function createOneUser(
 
     const insertResult = await UserCollection.insertOne(newUser); // Error thrown here are passed to the error handler, similar in most Collection methods.
     if (!insertResult.acknowledged) throw new Error('Error creating User');
+
+    // Sign JWT with userid
+    const token = jwt.sign(
+      { id: insertResult.insertedId },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      },
+    );
+
     res.status(201);
     res.json({
-      _id: insertResult.insertedId,
-      username,
-      name,
-      age,
-      email,
-      emailConfirmed,
-      userType,
+      token,
+      data: {
+        _id: insertResult.insertedId,
+        username,
+        name,
+        age,
+        email,
+        emailConfirmed,
+        userType,
+      },
     });
   } catch (error) {
     console.log('Error: ', error);
