@@ -21,7 +21,7 @@ router.post(
   validateRequest({ body: UserSignUp }),
   UserHandlers.createOneUser,
 );
-router.get(
+router.post(
   '/login',
   validateRequest({ body: UserLogin }),
   UserHandlers.findOneUser,

@@ -3,6 +3,9 @@ import * as z from 'zod';
 
 import { db } from '../../db';
 
+// TODO: Remove hardcoded password in response when querying for users
+// Currently .strip() or .omit({ password: true }) does not remove password from the payload.
+
 // Default User schema for login/logout etc
 export const User = z.object({
   username: z.string().min(5),

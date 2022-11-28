@@ -18,6 +18,7 @@ export async function findAll(
   next: NextFunction,
 ) {
   try {
+    console.log('getting all users');
     const users = await UserCollection.find().toArray();
     res.json(users);
   } catch (error) {
@@ -85,14 +86,16 @@ export async function findOneUser(
   res: Response<UserWithId>,
   next: NextFunction,
 ) {
-  const { email, password } = req.body;
-  console.log('Made it here', req.body);
-  if (!email || !password) {
-    res.status(404);
-    throw new Error('User not found.');
-  }
-  // Check if email and password are valid
   try {
+    const { email, password } = req.body;
+    console.log('Made it here', req.body);
+    if (!email || !password) {
+      res.status(404);
+      throw new Error('User not found.');
+    }
+
+    // Check if email and password are valid
+
     const result = await UserCollection.findOne({
       email: email,
     });

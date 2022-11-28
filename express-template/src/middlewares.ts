@@ -30,10 +30,8 @@ export function errorHandler(
 export const validateRequest = (validators: RequestValidators) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // console.log('made it here, ', validators.params);
       if (validators.body) {
         req.body = await validators.body.parseAsync(req.body);
-        console.log('body: ', req.body);
       }
       if (validators.params) {
         req.params = await validators.params.parseAsync(req.params);
