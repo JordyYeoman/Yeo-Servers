@@ -3,9 +3,12 @@ import express from "express";
 import config from "config";
 import connectToDb from "./utils/connectToDb";
 import log from "./utils/logger";
+import router from "./api/routes";
 
 const app = express();
 const port = config.get("port");
+
+app.use("/api/v1", router);
 
 app.listen(port, async () => {
   connectToDb();
