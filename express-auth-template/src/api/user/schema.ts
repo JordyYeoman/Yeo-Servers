@@ -9,13 +9,13 @@ export const createUserSchema = object({
       required_error: "Last name is required",
     }),
     password: string({
-      required_error: "Password name is required",
+      required_error: "Password is required",
     }).min(6, "Password is too short - minimum length of 6 characters"),
     passwordConfirmation: string({
-      required_error: "First name is required",
+      required_error: "Password Confirmation is required",
     }),
     email: string({
-      required_error: "First name is required",
+      required_error: "Email is required",
     }).email("Not a valid email address"),
   }).refine((data) => data.password === data.passwordConfirmation, {
     message: "Passwords do not match",
@@ -23,4 +23,12 @@ export const createUserSchema = object({
   }),
 });
 
+export const verifyUserSchema = object({
+  params: object({
+    id: string(),
+    verificationCode: string(),
+  }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];

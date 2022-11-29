@@ -6,7 +6,7 @@ import {
   pre,
   DocumentType,
 } from "@typegoose/typegoose";
-import nanoid from "nanoid"; // CommonJS export supported only to 3.3.4
+import { nanoid } from "nanoid"; // CommonJS export supported only to 3.3.4
 import argon2 from "argon2";
 import log from "../../utils/logger";
 
@@ -61,5 +61,5 @@ export class User {
   }
 }
 
-const userModel = getModelForClass(User);
-export default userModel;
+const UserModel = getModelForClass(User);
+export default UserModel;
