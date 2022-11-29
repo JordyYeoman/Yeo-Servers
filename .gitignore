@@ -128,3 +128,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+express-auth-template/config/default.ts
+express-auth-template/config/production.ts

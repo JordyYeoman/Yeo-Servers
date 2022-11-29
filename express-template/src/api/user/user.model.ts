@@ -18,14 +18,15 @@ export const User = z.object({
 });
 
 // Response from Server - User model without password or other sensitive fields
-export const UserWithoutSensitiveData = z.object({
-  username: z.string().min(5),
-  name: z.string().min(5),
-  age: z.number().min(10),
-  email: z.string().email(),
-  emailConfirmed: z.boolean(),
-  userType: z.string(),
-});
+// export const UserWithoutSensitiveData = z.object({
+//   username: z.string().min(5),
+//   name: z.string().min(5),
+//   age: z.number().min(10),
+//   email: z.string().email(),
+//   emailConfirmed: z.boolean(),
+//   userType: z.string(),
+// });
+export const UserWithoutSensitiveData = User.omit({ password: true });
 
 // User object returned with jwt
 export const UserWithJWT = z.object({

@@ -19,7 +19,7 @@ export async function findAll(
 ) {
   try {
     console.log('getting all users');
-    const users = await UserCollection.find().toArray();
+    const users = await UserCollection.find({ password: 0 }).toArray();
     res.json(users);
   } catch (error) {
     next(error);
