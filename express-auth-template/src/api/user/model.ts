@@ -5,6 +5,7 @@ import {
   Severity,
   pre,
   DocumentType,
+  index,
 } from "@typegoose/typegoose";
 import { nanoid } from "nanoid"; // CommonJS export supported only to 3.3.4
 import argon2 from "argon2";
@@ -20,6 +21,7 @@ import log from "../../utils/logger";
     allowMixed: Severity.ALLOW, // Allow mixed so the passwordReset field can be nullable
   },
 })
+@index({ email: 1 })
 @pre<User>("save", async function () {
   if (!this.isModified("password")) {
     return;
@@ -47,7 +49,7 @@ export class User {
   verificationCode: string;
 
   @prop()
-  passwordReset: string | null;
+  passwordResetCode: string | null;
 
   @prop({ default: false })
   verified: boolean;

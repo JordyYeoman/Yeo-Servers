@@ -1,7 +1,17 @@
 import express from "express";
 import validateResource from "../../middlware/validateResource";
-import { createUserHandler, verifyUserHandler } from "./controller";
-import { createUserSchema, verifyUserSchema } from "./schema";
+import {
+  createUserHandler,
+  forgotPassworHandler,
+  resetPasswordHandler,
+  verifyUserHandler,
+} from "./controller";
+import {
+  createUserSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyUserSchema,
+} from "./schema";
 
 const router = express.Router();
 
@@ -12,5 +22,15 @@ router.get(
 );
 
 router.post("/", validateResource(createUserSchema), createUserHandler);
+router.post(
+  "/forgotpassword",
+  validateResource(forgotPasswordSchema),
+  forgotPassworHandler
+);
+router.post(
+  "/resetpassword/:id/:passwordResetCode",
+  validateResource(resetPasswordSchema),
+  resetPasswordHandler
+);
 
 export default router;
