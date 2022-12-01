@@ -10,3 +10,5 @@ export const createSessionSchema = object({
     }).min(6, "Invalid email or password"),
   }),
 });
+
+export type CreateSessionInput = TypeOf<typeof createSessionSchema>["body"];
