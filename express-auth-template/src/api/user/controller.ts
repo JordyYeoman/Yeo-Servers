@@ -9,7 +9,7 @@ import {
   ResetPasswordInput,
   VerifyUserInput,
 } from "./schema";
-import { createUser, findByEmail, findUserById } from "./service";
+import { createUser, findUserByEmail, findUserById } from "./service";
 import config from "config";
 
 export async function createUserHandler(
@@ -81,7 +81,7 @@ export async function forgotPassworHandler(
     "If a user with that email is registered you will receive a password reset email";
   const { email } = req.body;
 
-  const user = await findByEmail(email);
+  const user = await findUserByEmail(email);
 
   if (!user) {
     log.debug(`User with email: ${email} does not exist`);

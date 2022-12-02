@@ -1,6 +1,5 @@
 import config from "config";
 import jwt from "jsonwebtoken";
-import { object } from "zod";
 
 export function signJwt(
   object: Object,
@@ -12,13 +11,16 @@ export function signJwt(
     "base64"
   ).toString("ascii");
 
+  console.log("Object: ", object);
   // RS256 means we will be using public and private keys
   // Meaning that the if the user service is part of a microservice architecture,
   // we can share the public key around to authenticate on other services
-  return jwt.sign(object, signingKey, {
+  let signedKey = jwt.sign(object, signingKey, {
     ...(options && options),
     algorithm: "RS256",
   });
+  console.log("signedkey: ", signedKey);
+  return signedKey;
 }
 
 export function verifyJwt<T>(
