@@ -3,6 +3,7 @@ import validateResource from "../../middlware/validateResource";
 import {
   createUserHandler,
   forgotPassworHandler,
+  getCurrentUserHandler,
   resetPasswordHandler,
   verifyUserHandler,
 } from "./controller";
@@ -20,6 +21,8 @@ router.get(
   validateResource(verifyUserSchema),
   verifyUserHandler
 );
+
+router.get("/me", getCurrentUserHandler);
 
 router.post("/", validateResource(createUserSchema), createUserHandler);
 router.post(

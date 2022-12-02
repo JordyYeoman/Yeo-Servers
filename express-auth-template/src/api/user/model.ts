@@ -11,6 +11,15 @@ import { nanoid } from "nanoid"; // CommonJS export supported only to 3.3.4
 import argon2 from "argon2";
 import log from "../../utils/logger";
 
+// Fields that should not be included in the response body
+export const privateFields = [
+  "password",
+  "__v",
+  "verificationCode",
+  "passwordResetCode",
+  "verified",
+];
+
 // @ - Class Decorators
 
 @modelOptions({
