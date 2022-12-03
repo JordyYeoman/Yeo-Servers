@@ -15,9 +15,10 @@ app.use(deserializeUser);
 
 app.use("/api/v1", router);
 
-app.listen(port, async () => {
-  connectToDb();
-  log.info("Connected to MongoDB");
-  log.info("Systems Online and Ready, sir");
-  log.info(`App started at http://localhost:${port}`);
+export const server = app.listen(port, async () => {
+  await connectToDb();
+  log.info("Systems online and ready sir.");
+  log.info(`Server started on PORT: ${port}`);
 });
+
+export default app;

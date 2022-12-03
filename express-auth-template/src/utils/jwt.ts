@@ -11,7 +11,6 @@ export function signJwt(
     "base64"
   ).toString("ascii");
 
-  console.log("Object: ", object);
   // RS256 means we will be using public and private keys
   // Meaning that the if the user service is part of a microservice architecture,
   // we can share the public key around to authenticate on other services
@@ -19,7 +18,7 @@ export function signJwt(
     ...(options && options),
     algorithm: "RS256",
   });
-  console.log("signedkey: ", signedKey);
+
   return signedKey;
 }
 
