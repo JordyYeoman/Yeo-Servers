@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AnyZodObject } from "zod";
+import { AnyZodObject, ZodError } from "zod";
 
 const validateResource =
   (schema: AnyZodObject) =>
@@ -11,8 +11,12 @@ const validateResource =
         params: req.params,
       });
       next();
-    } catch (e: any) {
-      return res.status(404).send(e.errors);
+    } catch (error: any) {
+      // return res.status(404).send(e.errors);
+      if (error instanceof ZodError) {
+        res.status(422);
+      }
+      next(error);
     }
   };
 

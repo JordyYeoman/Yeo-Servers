@@ -15,6 +15,9 @@ app.use(deserializeUser);
 
 app.use("/api/v1", router);
 
+app.use(notFound);
+app.use(errorHandler);
+
 export const server = app.listen(port, async () => {
   await connectToDb();
   log.info("Systems online and ready sir.");

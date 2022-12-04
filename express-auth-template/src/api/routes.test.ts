@@ -4,7 +4,7 @@ import app, { server } from "../app";
 
 afterAll((done) => {
   server.close(); // Need to extract the server instance from app.listen to successfully close after unit tests have run
-  mongoose.disconnect(); // Close connection to mongodb after successful completing all tests
+  mongoose.connection.close(); // Closing the DB connection allows Jest to exit successfully.
   done();
 });
 
