@@ -5,6 +5,8 @@ import connectToDb from "./utils/connectToDb";
 import log from "./utils/logger";
 import router from "./api/routes";
 import deserializeUser from "./middlware/deserializeUser";
+import { notFound } from "./middlware/notFound";
+import { errorHandler } from "./middlware/errorHandler";
 
 const app = express();
 const port = config.get("port");
