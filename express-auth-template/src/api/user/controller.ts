@@ -20,14 +20,14 @@ export async function createUserHandler(
 
   try {
     const user = await createUser(body);
-
+    console.log("User created");
     await sendEmail({
       from: config.get<string>("serviceEmail"),
       to: user.email,
       subject: "Please verify your account",
       text: `Verification code: ${user.verificationCode}. Id: ${user._id}`,
     });
-
+    console.log("Made it here?");
     return res.send("User successfully created.");
   } catch (e: any) {
     if (e.code === 11000) {

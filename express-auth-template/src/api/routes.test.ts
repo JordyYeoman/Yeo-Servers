@@ -1,12 +1,5 @@
-import mongoose from "mongoose";
 import request from "supertest";
-import app, { server } from "../app";
-
-afterAll((done) => {
-  server.close(); // Need to extract the server instance from app.listen to successfully close after unit tests have run
-  mongoose.connection.close(); // Closing the DB connection allows Jest to exit successfully.
-  done();
-});
+import app from "../app";
 
 describe("GET /api/v1", () => {
   it("responds with a json message", (done) => {
@@ -19,7 +12,6 @@ describe("GET /api/v1", () => {
         {
           message: "API - 👋🌎🌍🌏",
         },
-        // eslint-disable-next-line @typescript-eslint/comma-dangle
         done
       );
   });

@@ -1,12 +1,5 @@
-import mongoose from "mongoose";
 import request from "supertest";
-import app, { server } from "../../app";
-
-afterAll((done) => {
-  server.close(); // Need to extract the server instance from app.listen to successfully close after unit tests have run
-  mongoose.connection.close(); // Closing the DB connection allows Jest to exit successfully.
-  done();
-});
+import app from "../../app";
 
 describe("USER ROUTE", () => {
   describe("POST /api/v1/users/", () => {
@@ -18,11 +11,29 @@ describe("USER ROUTE", () => {
           name: "Jordy Yeoman",
         })
         .expect("Content-Type", /json/)
-        .expect(404)
+        .expect(422)
         .then((response) => {
-          console.log("response", response);
           expect(response.body).toHaveProperty("message");
-          expect(response.body.message).toContain("Invalid email"); // Expect ZOD error for invalid email.
+          expect(response.body.message).toContain("First name is required");
+          expect(response.body.message).toContain("Last name is required");
         }));
+    it("creates a new user", async () =>
+      request(app)
+        .post("/api/v1/users/")
+        .set("Accept", "application/json")
+        .send({
+          firstName: "Jordy",
+          lastName: "Yeoman",
+          email: "test@yeomanindustries.com.au",
+          password: "testing_password_123",
+          passwordConfirmation: "testing_password_123",
+        })
+        .expect("Content-Type", /json/)
+        .expect(200));
+    // .then((response) => {
+    //   expect(response.body).toHaveProperty("message");
+    //   expect(response.body.message).toContain("First name is required");
+    //   expect(response.body.message).toContain("Last name is required");
+    // }));
   });
 });
