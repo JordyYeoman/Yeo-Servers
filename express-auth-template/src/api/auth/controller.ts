@@ -49,24 +49,20 @@ export async function refreshAccessTokenHandler(req: Request, res: Response) {
     refreshToken.toString(),
     "refreshTokenPublicKey"
   );
-  console.log("made it here 5");
   if (!decoded) {
     return res.status(401).send("Could not refresh access token");
   }
 
   const session = await findSessionById(decoded.session);
-  console.log("made it here 3");
   if (!session || !session.valid) {
     return res.status(401).send("Could not refresh access token");
   }
 
   const user = await findUserById(String(session.user));
-  console.log("made it here 4");
   if (!user) {
     return res.status(401).send("Could not refresh access token");
   }
 
   const accessToken = signAccessToken(user);
-  console.log("made it here 5");
   return res.send({ accessToken });
 }

@@ -17,18 +17,15 @@ export async function createUserHandler(
   res: Response
 ) {
   let body = req.body;
-
   try {
     const user = await createUser(body);
-    console.log("User created");
     await sendEmail({
       from: config.get<string>("serviceEmail"),
       to: user.email,
       subject: "Please verify your account",
       text: `Verification code: ${user.verificationCode}. Id: ${user._id}`,
     });
-    console.log("Made it here?");
-    return res.send("User successfully created.");
+    return res.send({ id: user._id, message: "User successfully created." });
   } catch (e: any) {
     if (e.code === 11000) {
       return res.status(409).send("Account already exists");
