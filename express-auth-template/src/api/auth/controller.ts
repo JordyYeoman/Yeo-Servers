@@ -20,7 +20,6 @@ export async function createSessionHandler(
   if (!user.verified) {
     return res.send("Please verify your email");
   }
-
   const isValid = user.validatePassword(password);
   if (!isValid) {
     return res.send(message);
@@ -28,17 +27,14 @@ export async function createSessionHandler(
 
   // sign an access token
   const accessToken = signAccessToken(user);
-
   // sign a refresh token
   const refreshToken = await signRefreshToken({ userId: user._id });
-  console.log("made it here?", accessToken);
   // send the tokens
   return res.send({ accessToken, refreshToken });
 }
 
 export async function refreshAccessTokenHandler(req: Request, res: Response) {
   const refreshToken = get(req, "headers.x-refresh");
-  console.log("refresh token", refreshToken);
   if (!refreshToken) {
     return res.status(401).send("Could not refresh access token");
   }

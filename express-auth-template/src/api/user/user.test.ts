@@ -100,6 +100,18 @@ describe("POST /api/v1/users/", () => {
 
     expect(statusCode).toBe(200);
     expect(body.id).toBeDefined();
+    userSession.id = body.id;
+  });
+
+  it("should verify a user", async () => {
+    let foundUser = await findUserById(userSession.id);
+    const response = await supertest(app)
+      .get(
+        `/api/v1/users/verify/${userSession.id}/${foundUser?.verificationCode}`
+      )
+      .set("Accept", "application/json");
+
+    expect(response.statusCode).toBe(200);
   });
 
   it("should login a user successfully", async () => {
@@ -110,11 +122,9 @@ describe("POST /api/v1/users/", () => {
         email: "test4@yeomanindustries.com.au",
         password: user.password,
       });
-    console.log("body: ", body.token);
-    // expect(body).toContain("accessToken");
-    // expect(body).toContain("refreshToken");
+    expect(body.accessToken).toBeDefined();
+    expect(body.refreshToken).toBeDefined();
     expect(statusCode).toBe(200);
-    // expect(body.id).toBeDefined();
   });
 
   // To be tested after login/auth/session tests are written

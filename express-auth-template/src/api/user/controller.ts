@@ -145,9 +145,7 @@ export async function getCurrentUserHandler(req: Request, res: Response) {
 export async function deleteUserHandler(req: Request, res: Response<{}>) {
   try {
     let id = "124";
-    console.log("res.locals.user", res.locals.user);
     const result = await deleteUserById(id);
-    console.log("result", result);
 
     if (!result) {
       res.status(404);
