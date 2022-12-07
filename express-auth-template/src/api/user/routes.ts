@@ -3,6 +3,7 @@ import requireUser from "../../middlware/requireUser";
 import validateResource from "../../middlware/validateResource";
 import {
   createUserHandler,
+  deleteUserHandler,
   forgotPassworHandler,
   getCurrentUserHandler,
   resetPasswordHandler,
@@ -10,7 +11,6 @@ import {
 } from "./controller";
 import {
   createUserSchema,
-  deleteUserSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyUserSchema,
@@ -37,6 +37,7 @@ router.post(
   validateResource(resetPasswordSchema),
   resetPasswordHandler
 );
-router.post("/delete", validateResource(deleteUserSchema), deleteUserHandler);
+
+router.delete("/delete", requireUser, deleteUserHandler);
 
 export default router;

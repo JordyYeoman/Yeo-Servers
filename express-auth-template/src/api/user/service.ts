@@ -13,3 +13,7 @@ export function findUserByEmail(email: string) {
     email,
   });
 }
+
+export function deleteUserById(id: string) {
+  return UserModel.findByIdAndDelete(id);
+}

@@ -9,7 +9,12 @@ import {
   ResetPasswordInput,
   VerifyUserInput,
 } from "./schema";
-import { createUser, findUserByEmail, findUserById } from "./service";
+import {
+  createUser,
+  deleteUserById,
+  findUserByEmail,
+  findUserById,
+} from "./service";
 import config from "config";
 
 export async function createUserHandler(
@@ -135,4 +140,21 @@ export async function resetPasswordHandler(
 
 export async function getCurrentUserHandler(req: Request, res: Response) {
   return res.send(res.locals.user);
+}
+
+export async function deleteUserHandler(req: Request, res: Response<{}>) {
+  try {
+    let id = "124";
+    console.log("res.locals.user", res.locals.user);
+    const result = await deleteUserById(id);
+    console.log("result", result);
+
+    if (!result) {
+      res.status(404);
+      throw new Error(`User with id ${req.params.id} not found.`);
+    }
+    return res.status(204).end();
+  } catch (e: any) {
+    return res.status(500).send(e);
+  }
 }

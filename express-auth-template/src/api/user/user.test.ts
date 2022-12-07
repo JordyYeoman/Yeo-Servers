@@ -2,7 +2,12 @@ import request from "supertest";
 import app from "../../app";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import { createUser, findUserByEmail, findUserById } from "./service";
+import {
+  createUser,
+  deleteUserById,
+  findUserByEmail,
+  findUserById,
+} from "./service";
 import supertest from "supertest";
 import { User } from "./model";
 
@@ -49,10 +54,23 @@ describe("User Model", () => {
       expect(user?.firstName).toBe("Jordy");
       expect(user?.lastName).toBe("Yeoman");
     });
+
+    it("should delete a user by id", async () => {
+      let deletedUser = await deleteUserById(newUserId);
+
+      expect(deletedUser?.firstName).toBe("Jordy");
+      expect(deletedUser?.lastName).toBe("Yeoman");
+    });
   });
 });
 
 describe("POST /api/v1/users/", () => {
+  let userSession = {
+    id: "",
+    access: "",
+    refresh: "",
+  };
+
   it("responds with an error if the user is invalid", async () => {
     await request(app)
       .post("/api/v1/users/")
@@ -83,4 +101,31 @@ describe("POST /api/v1/users/", () => {
     expect(statusCode).toBe(200);
     expect(body.id).toBeDefined();
   });
+
+  it("should login a user successfully", async () => {
+    const { body, statusCode } = await supertest(app)
+      .post("/api/v1/auth/session")
+      .set("Accept", "application/json")
+      .send({
+        email: "test4@yeomanindustries.com.au",
+        password: user.password,
+      });
+    console.log("body: ", body.token);
+    // expect(body).toContain("accessToken");
+    // expect(body).toContain("refreshToken");
+    expect(statusCode).toBe(200);
+    // expect(body.id).toBeDefined();
+  });
+
+  // To be tested after login/auth/session tests are written
+
+  // it("should delete a user successfully", async () => {
+  //   const { body, statusCode } = await supertest(app)
+  //     .post("/api/v1/users/delete")
+  //     .set("Accept", "application/json")
+  //     .send({ ...user, email: "test4@yeomanindustries.com.au" });
+
+  //   expect(statusCode).toBe(200);
+  //   expect(body.id).toBeDefined();
+  // });
 });

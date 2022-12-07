@@ -17,13 +17,11 @@ export async function createSessionHandler(
   if (!user) {
     return res.send(message);
   }
-
   if (!user.verified) {
     return res.send("Please verify your email");
   }
 
   const isValid = user.validatePassword(password);
-
   if (!isValid) {
     return res.send(message);
   }
@@ -33,7 +31,7 @@ export async function createSessionHandler(
 
   // sign a refresh token
   const refreshToken = await signRefreshToken({ userId: user._id });
-
+  console.log("made it here?", accessToken);
   // send the tokens
   return res.send({ accessToken, refreshToken });
 }
