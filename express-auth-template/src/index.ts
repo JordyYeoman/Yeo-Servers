@@ -12,6 +12,8 @@ const port = config.get("port");
 
 app.listen(port, async () => {
   await connectToDb();
-  log.info("Systems online and ready sir.");
-  log.info(`Server started on PORT: ${port}`);
+  if (process.env.NODE_ENV === "development") {
+    log.info("Systems online and ready sir.");
+    log.info(`Server started on PORT: ${port}`);
+  }
 });

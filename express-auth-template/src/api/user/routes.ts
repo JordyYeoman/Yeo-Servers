@@ -10,6 +10,7 @@ import {
 } from "./controller";
 import {
   createUserSchema,
+  deleteUserSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyUserSchema,
@@ -36,5 +37,6 @@ router.post(
   validateResource(resetPasswordSchema),
   resetPasswordHandler
 );
+router.post("/delete", validateResource(deleteUserSchema), deleteUserHandler);
 
 export default router;
