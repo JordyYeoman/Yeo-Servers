@@ -12,7 +12,7 @@ const validateResource =
       });
       next();
     } catch (error: any) {
-      // return res.status(404).send(e.errors);
+      // console.log("ERROR", error);
       if (error instanceof ZodError) {
         res.status(422);
       }

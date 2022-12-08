@@ -6,7 +6,6 @@ module.exports = {
   verbose: true,
   forceExit: true,
   // clearMocks: true,
-  setupFiles: ["<rootDir>/src/test/setup-tests.ts"],
   setupFilesAfterEnv: ["<rootDir>/src/setupFilesAfterEnv.ts"],
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
 };

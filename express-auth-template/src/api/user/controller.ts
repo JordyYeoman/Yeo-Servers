@@ -14,6 +14,7 @@ import {
   deleteUserById,
   findUserByEmail,
   findUserById,
+  findUserByIdAndUpdate,
 } from "./service";
 import config from "config";
 
@@ -142,10 +143,23 @@ export async function getCurrentUserHandler(req: Request, res: Response) {
   return res.send(res.locals.user);
 }
 
+export async function updateUserHandler(req: Request, res: Response) {
+  const { email, firstName, lastName } = req.body;
+  try {
+    const result = await findUserByIdAndUpdate(res.locals.user._id, {
+      ...(email && { email }),
+      ...(firstName && { firstName }),
+      ...(lastName && { lastName }),
+    });
+    res.send("User updated successfully");
+  } catch (e: any) {
+    log.error(e);
+  }
+}
+
 export async function deleteUserHandler(req: Request, res: Response<{}>) {
   try {
-    let id = "124";
-    const result = await deleteUserById(id);
+    const result = await deleteUserById(res.locals.user._id);
 
     if (!result) {
       res.status(404);
@@ -153,6 +167,7 @@ export async function deleteUserHandler(req: Request, res: Response<{}>) {
     }
     return res.status(204).end();
   } catch (e: any) {
-    return res.status(500).send(e);
+    log.error(e);
+    return;
   }
 }

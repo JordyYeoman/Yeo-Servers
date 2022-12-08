@@ -7,12 +7,14 @@ import {
   forgotPassworHandler,
   getCurrentUserHandler,
   resetPasswordHandler,
+  updateUserHandler,
   verifyUserHandler,
 } from "./controller";
 import {
   createUserSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  updateUserSchema,
   verifyUserSchema,
 } from "./schema";
 
@@ -37,6 +39,9 @@ router.post(
   validateResource(resetPasswordSchema),
   resetPasswordHandler
 );
+
+// PUT - Update Object
+router.put("/update", validateResource(updateUserSchema), updateUserHandler);
 
 router.delete("/delete", requireUser, deleteUserHandler);
 

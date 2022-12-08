@@ -56,14 +56,16 @@ export const resetPasswordSchema = object({
   }),
 });
 
-// export const deleteUserSchema = object({
-//   body: object({
-//     id: string(),
-//   }),
-// });
+export const updateUserSchema = object({
+  body: object({
+    firstName: string().optional(),
+    lastName: string().optional(),
+    email: string().optional(),
+  }),
+});
 
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"];
-// export type DeleteUserInput = TypeOf<typeof deleteUserSchema>["body"];
+export type UpdateUserInput = TypeOf<typeof updateUserSchema>["body"];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

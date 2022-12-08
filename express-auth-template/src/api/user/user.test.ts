@@ -124,18 +124,41 @@ describe("POST /api/v1/users/", () => {
       });
     expect(body.accessToken).toBeDefined();
     expect(body.refreshToken).toBeDefined();
+    userSession.access = body.accessToken;
+    userSession.refresh = body.refreshToken;
     expect(statusCode).toBe(200);
   });
 
-  // To be tested after login/auth/session tests are written
+  it("should update user correctly", async () => {
+    const { text, statusCode } = await supertest(app)
+      .put("/api/v1/users/update")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${userSession.access}`)
+      .send({
+        email: "test123@gmail.com",
+        firstName: "Tony",
+      })
+      .expect(200);
 
-  // it("should delete a user successfully", async () => {
-  //   const { body, statusCode } = await supertest(app)
-  //     .post("/api/v1/users/delete")
-  //     .set("Accept", "application/json")
-  //     .send({ ...user, email: "test4@yeomanindustries.com.au" });
+    expect(statusCode).toBe(200);
+    expect(text).toEqual("User updated successfully");
+  });
 
-  //   expect(statusCode).toBe(200);
-  //   expect(body.id).toBeDefined();
-  // });
+  it("should fail gracefully with incorrect user bearer", async () => {
+    const { statusCode } = await supertest(app)
+      .delete("/api/v1/users/delete")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer xa15214`);
+
+    expect(statusCode).toBe(403);
+  });
+
+  it("should delete a user successfully", async () => {
+    const { statusCode } = await supertest(app)
+      .delete("/api/v1/users/delete")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${userSession.access}`);
+
+    expect(statusCode).toBe(204);
+  });
 });
