@@ -64,9 +64,10 @@ describe("User Model", () => {
   });
 });
 
-describe("POST /api/v1/users/", () => {
+describe("/api/v1/users/", () => {
   let userSession = {
     id: "",
+    email: "",
     access: "",
     refresh: "",
   };
@@ -103,7 +104,7 @@ describe("POST /api/v1/users/", () => {
     userSession.id = body.id;
   });
 
-  it("should verify a user", async () => {
+  it("/verify/:id/:verificationcode should verify a user", async () => {
     let foundUser = await findUserById(userSession.id);
     const response = await supertest(app)
       .get(
@@ -114,7 +115,7 @@ describe("POST /api/v1/users/", () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it("should login a user successfully", async () => {
+  it("auth/session should login a user successfully", async () => {
     const { body, statusCode } = await supertest(app)
       .post("/api/v1/auth/session")
       .set("Accept", "application/json")
@@ -129,7 +130,7 @@ describe("POST /api/v1/users/", () => {
     expect(statusCode).toBe(200);
   });
 
-  it("should update user correctly", async () => {
+  it("/update - should update user correctly", async () => {
     const { text, statusCode } = await supertest(app)
       .put("/api/v1/users/update")
       .set("Accept", "application/json")
@@ -142,6 +143,40 @@ describe("POST /api/v1/users/", () => {
 
     expect(statusCode).toBe(200);
     expect(text).toEqual("User updated successfully");
+    // Assign local variable to newly reset password for testing below
+    userSession.email = "test123@gmail.com";
+  });
+
+  it("/forgotpassword - should reset password for user", async () => {
+    const { text, statusCode } = await supertest(app)
+      .post("/api/v1/users/forgotpassword")
+      .set("Accept", "application/json")
+      .send({
+        email: "test123@gmail.com",
+      })
+      .expect(200);
+
+    expect(statusCode).toBe(200);
+    expect(text).toEqual(
+      "If a user with that email is registered you will receive a password reset email"
+    );
+  });
+
+  it("/resetpassword/:id/:passwordResetCode - should successfully update user password", async () => {
+    // Local mongoDB instance user for testing
+    let foundUser = await findUserById(userSession.id);
+    const { statusCode, text } = await supertest(app)
+      .post(
+        `/api/v1/users/resetpassword/${userSession.id}/${foundUser?.passwordResetCode}`
+      )
+      .set("Accept", "application/json")
+      .send({
+        password: "just_send_it113!!44",
+        passwordConfirmation: "just_send_it113!!44",
+      });
+
+    expect(statusCode).toBe(200);
+    expect(text).toEqual("User password updated successfully");
   });
 
   it("should fail gracefully with incorrect user bearer", async () => {
