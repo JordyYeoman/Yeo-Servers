@@ -1,11 +1,14 @@
 {
   "name": "production-grade-walkthrough",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "license": "MIT",
   "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "start": "ts-node src/app.ts",
     "build": "tsc",
-    "dev": "tsx watch src/app.ts"
+    "lint": "eslint --fix src test",
+    "test": "jest"
   },
   "dependencies": {
     "@fastify/swagger": "^8.2.1",
@@ -15,14 +18,18 @@
     "env-schema": "^5.2.0",
     "fastify": "^4.10.2",
     "mongoose": "^6.8.0",
-    "nanoid": "3.3.4"
+    "nanoid": "3.3.4",
+    "pino": "^8.7.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
     "@types/node": "^18.11.14",
     "husky": "^8.0.2",
+    "pino-pretty": "^9.1.1",
     "prettier": "^2.8.1",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "tsx": "^3.12.1",
     "typescript": "^4.9.4",
     "vitest": "^0.25.7"

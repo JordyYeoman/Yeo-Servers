@@ -1,7 +1,14 @@
-import pino from 'pino';
+import pino from "pino";
 
-export const logger = pino({
-    timestamp() {
-        return `, ${new Date().toISOString()}`
+const logger = pino({
+  transport: {
+    target: "pino-pretty",
+    options: {
+      colorize: true,
     },
+  },
 });
+
+logger.info("System Booting...");
+
+export default logger;
