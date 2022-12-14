@@ -1,7 +1,10 @@
 import fastify from "fastify";
+import { todoRoute } from "../modules/todo/todo.route";
 
-export function createServer() {
-    const app = fastify();
+export async function createServer() {
+  const app = fastify();
 
-    return app
+  app.register(todoRoute, { prefix: "/api/todos" });
+
+  return app;
 }
