@@ -1,4 +1,4 @@
-todo.jordyyeoman.co {
+todo.yeomanindustries.co {
     reverse_proxy todo-app:4000 {
         header_down Strict-Trasport-Security max-age=31536000;
     }
