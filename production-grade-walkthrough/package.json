@@ -4,7 +4,7 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "ts-node src/app.ts",
     "build": "tsc",
     "lint": "eslint --fix src test",
